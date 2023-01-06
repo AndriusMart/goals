@@ -8,11 +8,11 @@
             <span class="input-group-text">city</span>
             <input type="text" name="city" class="form-control" value="{{old('city')}}">
         @csrf
-        <button type="submit" class="btn btn-secondary mt-4">Create</button>
+        <button type="submit" class="btn btn-secondary mt-4">Search</button>
     </form>
     {{$weather}}
     {{$city}}
-    {{$temp-273.15}}
+    {{$temp}}
 </div>
 <div class="items bg-foto">
     <div class="col-9 bg-foto">
