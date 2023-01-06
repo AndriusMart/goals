@@ -21,7 +21,7 @@ use App\Http\Controllers\HomeController as H;
 Auth::routes();
 
 Route::get('/', [H::class, 'homeList'])->name('home')->middleware('gate:home');
-Route::put('/rate/{book}', [H::class, 'rate'])->name('rate')->middleware('gate:user');
+Route::post('/searchCity', [H::class, 'searchCity'])->name('searchCity')->middleware('gate:user');
 
 
 

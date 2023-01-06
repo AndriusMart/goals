@@ -2,6 +2,18 @@
 
 @section('content')
 <h1 class="title mid"><span>My</span>Goals</h1>
+<div>
+    <form action="{{route('searchCity')}}" method="post" enctype="multipart/form-data">
+        <div class="input-group mb-3">
+            <span class="input-group-text">city</span>
+            <input type="text" name="city" class="form-control" value="{{old('city')}}">
+        @csrf
+        <button type="submit" class="btn btn-secondary mt-4">Create</button>
+    </form>
+    {{$weather}}
+    {{$city}}
+    {{$temp-273.15}}
+</div>
 <div class="items bg-foto">
     <div class="col-9 bg-foto">
         <div class="list-items">
@@ -10,6 +22,7 @@
                     <span class="fs-5 fw-semibold">Add new goal</span>
                     <div class="container">
                         <div class="row">
+                            {{-- {{dump($json)}} --}}
                             <div class="col-12">
                                 <form action="{{route('g_store')}}" method="post" enctype="multipart/form-data">
                                     <div class="input-group mb-3">
@@ -47,6 +60,7 @@
                                             <h2><span>Title: </span>{{$goal->title}}</h2>
                                             <h4><span>Days to do : </span>{{$goal->days}}</h4>
                                             <h4><span>left : </span>{{$time_now->diffInDays($goal->created_at->addDays($goal->days), false)}}</h4>
+                                            <h4><span>till : </span>{{$goal->created_at->addDays($goal->days)->format('d/m/Y')}}</h4>
                                         </div>
                                         <div class="buttons">
                                             <a href="{{route('g_show', $goal)}}" class="btn btn-info">Show</a>
