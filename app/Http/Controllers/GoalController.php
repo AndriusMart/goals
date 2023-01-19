@@ -49,11 +49,12 @@ class GoalController extends Controller
         Goal::create([
             'title' => $request->title,
             'days' => $request->days,
+            'done' => $request->done,
             'about' => $request->about,
             'user_id' => $request->user_id,
         ]);
 
-        return redirect()->route('g_index')->with('ok', 'New goal created');
+        return redirect()->route('home')->with('ok', 'New goal created');
     }
 
     /**
@@ -103,13 +104,22 @@ class GoalController extends Controller
         $goal->update([
             'title' => $request->title,
             'days' => $request->days,
+            'done' => $request->done,
             'about' => $request->about,
             'user_id' => $request->user_id,
         ]);
 
-        return redirect()->route('g_index')->with('ok', 'New goal created');
+        return redirect()->route('home')->with('ok', 'Goal '.$request->title .' updated');
     }
+    public function done(Request $request, Goal $goal)
+    {
 
+        $goal->update([
+            'done' => $request->done,
+        ]);
+
+        return redirect()->route('home')->with('ok', 'Goal '.$request->title .' accomplished');
+    }
     /**
      * Remove the specified resource from storage.
      *

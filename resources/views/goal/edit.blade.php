@@ -15,6 +15,10 @@
                             <input type="text" name="title" class="form-control" value="{{old('title', $goal->title)}}">
                         </div>
                         <div class="input-group mb-3">
+                            <span class="input-group-text">done</span>
+                            <input type="text" name="done" class="form-control" value="{{old('done', $goal->done)}}">
+                        </div>
+                        <div class="input-group mb-3">
                             <span class="input-group-text">Days to do</span>
                             <input type="text" name="days" class="form-control" value="{{old('isbn', $goal->days)}}">
                         </div>

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title', 100);
             $table->text('about')->nullable();
             $table->string('days');
+            $table->string('done');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

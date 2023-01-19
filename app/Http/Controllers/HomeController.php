@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Auth;
 use Carbon\Carbon;
+use Stevebauman\Location\Facades\Location;
 
 class HomeController extends Controller
 {
@@ -15,25 +16,16 @@ class HomeController extends Controller
 
     public function homeList(Request $request)
     {
-        // $curl = curl_init();
 
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => 'https://api.countrystatecity.in/v1/countries',
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_HTTPHEADER => array(
-        //         'X-CSCAPI-KEY: API_KEY'
-        //     ),
-        // ));
-
-        // $response = curl_exec($curl);
-
-        // curl_close($curl);
-        // echo $response;
-
-        // $city = isset($request->city) ? $request->city : 'Vilnius';
+        $ip = $request->ip();
+        if (Location::get($ip)) {
+            $position = Location::get($ip)->cityName;
+        } else {
+            $position = 'Kaunas';
+        }
 
         $time_now = Carbon::now();
-        $city = isset($request->city) ? $request->city : 'Vilnius';
+        $city = isset($request->city) ? $request->city : $position;
         $url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $city . '&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric';
         $json = Http::get($url);
         $weather = $json->json();
@@ -47,7 +39,12 @@ class HomeController extends Controller
 
             ]);
         } else {
-            $city = 'Vilnius';
+            $ip = $request->ip();
+            if (Location::get($ip)) {
+                $city = Location::get($ip)->cityName;
+            } else {
+                $city = 'Kaunas';
+            }
             $url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $city . '&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric';
             $json = Http::get($url);
             $weather = $json->json();
@@ -66,4 +63,5 @@ class HomeController extends Controller
             'city' => $request->city
         ]);
     }
+    
 }

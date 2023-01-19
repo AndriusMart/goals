@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoalController as G;
 use App\Http\Controllers\HomeController as H;
+use App\Http\Controllers\DoneController as D;
 
 
 /*
@@ -27,13 +28,16 @@ Route::post('/searchCity', [H::class, 'searchCity'])->name('searchCity')->middle
 
 
 
+
 Route::prefix('goal')->name('g_')->group(function () {
     Route::get('/', [G::class, 'index'])->name('index')->middleware('gate:user');
-    Route::get('/create', [G::class, 'create'])->name('create')->middleware('gate:admin');
-    Route::post('/create', [G::class, 'store'])->name('store')->middleware('gate:admin');
+    Route::get('/create', [G::class, 'create'])->name('create')->middleware('gate:user');
+    Route::post('/create', [G::class, 'store'])->name('store')->middleware('gate:user');
     Route::get('/show/{goal}', [G::class, 'show'])->name('show')->middleware('gate:user');
-    Route::delete('/delete/{goal}', [G::class, 'destroy'])->name('delete')->middleware('gate:admin');
-    Route::get('/edit/{goal}', [G::class, 'edit'])->name('edit')->middleware('gate:admin');
-    Route::put('/edit/{goal}', [G::class, 'update'])->name('update')->middleware('gate:admin');
+    Route::delete('/delete/{goal}', [G::class, 'destroy'])->name('delete')->middleware('gate:user');
+    Route::get('/edit/{goal}', [G::class, 'edit'])->name('edit')->middleware('gate:user');
+    Route::put('/edit/{goal}', [G::class, 'update'])->name('update')->middleware('gate:user');
+    Route::put('/{goal}', [G::class, 'done'])->name('done')->middleware('gate:user');
 });
+
 

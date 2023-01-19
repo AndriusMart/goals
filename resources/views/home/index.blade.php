@@ -15,7 +15,7 @@
     {{$temp}}
 </div>
 <div class="items bg-foto">
-    <div class="col-9 bg-foto">
+    <div class="col-11 bg-foto">
         <div class="list-items">
             <div class="filter">
                 <div class="card filter">
@@ -38,6 +38,7 @@
                                         <input type="text" name="days" class="form-control" value="{{old('days')}}">
                                     </div>
                                     <input type="hidden" value="{{ Auth::user()->id }}" name="user_id">
+                                    <input type="hidden" value="1" name="done">
             
                                     @csrf
                                     <button type="submit" class="btn btn-secondary mt-4">Create</button>
@@ -54,6 +55,7 @@
                         <div class="card-img ">
                             <ul class="list-group">
                                 @forelse($goals as $goal)
+                                @if($goal->done == 1)
                                 <li class="list-group-item">
                                     <div class="hotels-list">
                                         <div class="content">
@@ -64,17 +66,17 @@
                                         </div>
                                         <div class="buttons">
                                             <a href="{{route('g_show', $goal)}}" class="btn btn-info">Show</a>
-                                            @if(Auth::user()->role >=10)
                                             <a href="{{route('g_edit', $goal)}}" class="btn btn-success">Edit</a>
-                                            <form action="{{route('g_delete', $goal)}}" method="post">
+                                            <form action="{{route('g_done', $goal)}}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" value="2" name="done">
                                                 @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                @method('put')
+                                                <button type="submit" class="btn btn-danger">Done</button>
                                             </form>
-                                            @endif
                                         </div>
                                     </div>
                                 </li>
+                                @endif
                                 @empty
                                 <li class="list-group-item">No goals found</li>
                                 @endforelse
@@ -88,10 +90,35 @@
         <div class="">
             <div class="  carousel-border">
                 <div class="card">
-                    <span class="fs-5 fw-semibold">My info</span>
+                    <span class="fs-5 fw-semibold">Accomplished Goals</span>
                     <div class="card-img ">
                         <ul class="list-group">
-                            balaslbdblas
+                            @forelse($goals as $goal)
+                            @if($goal->done == 2)
+                                <li class="list-group-item">
+                                    <div class="hotels-list">
+                                        <div class="content">
+                                            <h2><span>Title: </span>{{$goal->title}}</h2>
+                                            <h4><span>Days to do : </span>{{$goal->days}}</h4>
+                                            <h4><span>left : </span>{{$time_now->diffInDays($goal->created_at->addDays($goal->days), false)}}</h4>
+                                            <h4><span>till : </span>{{$goal->created_at->addDays($goal->days)->format('d/m/Y')}}</h4>
+                                        </div>
+                                        <div class="buttons">
+                                            <a href="{{route('g_show', $goal)}}" class="btn btn-info">Show</a>
+                                            <a href="{{route('g_edit', $goal)}}" class="btn btn-success">Edit</a>
+                                            <form action="{{route('g_done', $goal)}}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden" value="1" name="done">
+                                                @csrf
+                                                @method('put')
+                                                <button type="submit" class="btn btn-danger">Undo</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endif
+                                @empty
+                                <li class="list-group-item">No goals found</li>
+                                @endforelse
                         </ul>
                       
                 </div>
@@ -99,6 +126,20 @@
             </div>
         </div>
     </div>
+    <div class="">
+        <div class="  carousel-border">
+            <div class="card">
+                <span class="fs-5 fw-semibold">My info</span>
+                <div class="card-img ">
+                    <ul class="list-group">
+                        balaslbdblas
+                    </ul>
+                  
+            </div>
+
+        </div>
+    </div>
+</div>
     
         </div>
     
