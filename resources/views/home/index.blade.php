@@ -3,18 +3,32 @@
 @section('content')
 <h1 class="title mid"><span>My</span>Goals</h1>
 <div>
-    <form action="{{route('searchCity')}}" method="post" enctype="multipart/form-data">
-        <div class="input-group mb-3">
-            <span class="input-group-text">city</span>
-            <input type="text" name="city" class="form-control" value="{{old('city')}}">
-        @csrf
-        <button type="submit" class="btn btn-secondary mt-4">Search</button>
+    <div class="container">
+        <h2>Weather with JavaScript</h2>
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control" id="city" placeholder="Enter city" name="city">
+          </div>
+          <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+        </form>
+        <div id="weather-result"></div>
+        <h2 class="mt-5">Weather with Laravel</h2>
+      <div class="form-group">
+      <form method="get" action="{{ route('home') }}">
+        <label for="search_city">Search City:</label>
+        <input type="text" class="form-control"  name="search_city" id="search_city">
+        <input type="submit" value="Search">
     </form>
-    {{$weather}}
-    {{$city}}
-    {{$temp}}
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Weather in {{$city}}</h5>
+          <p class="card-text">Temperature {{$temp}} &#8451;</p>
+          <p class="card-text">Weather {{$weather}}</p>
+        </div>
+      </div>
 </div>
-<div class="items bg-foto">
+</div>
+<div class="items bg-foto mt-5">
     <div class="col-11 bg-foto">
         <div class="list-items">
             <div class="filter">
@@ -22,7 +36,6 @@
                     <span class="fs-5 fw-semibold">Add new goal</span>
                     <div class="container">
                         <div class="row">
-                            {{-- {{dump($json)}} --}}
                             <div class="col-12">
                                 <form action="{{route('g_store')}}" method="post" enctype="multipart/form-data">
                                     <div class="input-group mb-3">
@@ -145,4 +158,52 @@
     
 </div>
 </body>
+<script>
+      let currentCity = 'Kaunas'; // default city
+
+getWeatherData();
+
+function getWeatherData(city = currentCity) {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric`)
+  .then(response => response.json())
+  .then(data => {
+    let weatherResult = document.querySelector("#weather-result");
+    weatherResult.innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Weather in ${data.name}</h5>
+          <p class="card-text">Temperature: ${data.main.temp} &#8451;</p>
+          <p class="card-text">Weather: ${data.weather[0].description}</p>
+        </div>
+      </div>
+    `;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+    document.querySelector("#submit").addEventListener("click", function(event) {
+      event.preventDefault();
+      let city = document.querySelector("#city").value;
+      console.log(city);
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric`)
+      .then(response => response.json())
+      .then(data => {
+        let weatherResult = document.querySelector("#weather-result");
+        weatherResult.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Weather in ${data.name}</h5>
+              <p class="card-text">Temperature: ${data.main.temp} &#8451;</p>
+              <p class="card-text">Weather: ${data.weather[0].description}</p>
+            </div>
+          </div>
+        `;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    });
+    
+  </script>
 @endsection

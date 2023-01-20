@@ -5,63 +5,64 @@ namespace App\Http\Controllers;
 use App\Models\Goal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Auth;
 use Carbon\Carbon;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Cache;
+use Exception;
 
 class HomeController extends Controller
 {
-
-
-
     public function homeList(Request $request)
     {
-
-        $ip = $request->ip();
-        if (Location::get($ip)) {
-            $position = Location::get($ip)->cityName;
-        } else {
-            $position = 'Kaunas';
+        $city = $request->validate(['city' => 'string|min:3']);
+        if (!$city) {
+            $city = $request->validate(['search_city' => 'string|min:3']);
         }
-
-        $time_now = Carbon::now();
-        $city = isset($request->city) ? $request->city : $position;
-        $url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $city . '&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric';
-        $json = Http::get($url);
-        $weather = $json->json();
-        if (isset($weather['main']) && isset($weather)) {
-            return view('home.index', [
-                'goals' => Goal::orderBy('title', 'asc')->get(),
-                'time_now' => $time_now,
-                'temp' => $weather['main']['temp'],
-                'city' => $weather['name'],
-                'weather' => $weather['weather'][0]['description']
-
-            ]);
-        } else {
-            $ip = $request->ip();
-            if (Location::get($ip)) {
-                $city = Location::get($ip)->cityName;
-            } else {
-                $city = 'Kaunas';
-            }
-            $url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $city . '&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric';
-            $json = Http::get($url);
-            $weather = $json->json();
-            return view('home.index', [
-                'goals' => Goal::orderBy('title', 'asc')->get(),
-                'time_now' => $time_now,
-                'temp' => $weather['main']['temp'],
-                'city' => $weather['name'],
-                'weather' => $weather['weather'][0]['description']
-            ]);
+        if (!$city) {
+            $city = $this->getCityByIp($request->ip());
+        } 
+        try {
+            $weather = $this->getWeatherData($city);
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back();
         }
-    }
-    public function searchCity(Request $request)
-    {
-        return redirect()->route('home', [
-            'city' => $request->city
+        $weather = $this->getWeatherData($city);
+        if (!$weather) {
+            $city = $this->getCityByIp($request->ip());
+            $weather = $this->getWeatherData($city);
+        }
+        
+        return view('home.index', [
+            'goals' => Goal::orderBy('title', 'asc')->get(),
+            'time_now' => Carbon::now(),
+            'temp' => $weather['main']['temp'],
+            'city' => $weather['name'],
+            'weather' => $weather['weather'][0]['description']
         ]);
+    }
+
+private function getCityByIp($ip)
+    {
+        if (Location::get($ip)) {
+            return Location::get($ip)->cityName;
+        }
+        return 'Kaunas';
+    }
+
+private function getWeatherData($city)
+    {
+        if(is_array($city)){
+          $city = implode(" ",$city);  
+        }
+        $weather = Cache::remember("weather.$city", 60, function () use ($city) {
+            $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric";
+            return Http::get($url)->json();
+        });
+        if (isset($weather['main']) && isset($weather)) {
+            return $weather;
+        }
+        return null;
     }
     
 }
