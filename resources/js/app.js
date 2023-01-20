@@ -64,3 +64,5 @@ function getWeatherData(city = currentCity) {
       });
     });
     
+
+    

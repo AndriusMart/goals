@@ -31,7 +31,7 @@ class HomeController extends Controller
         if (!$weather) {
             $city = $this->getCityByIp($request->ip());
             $weather = $this->getWeatherData($city);
-        }
+        } 
         
         return view('home.index', [
             'goals' => Goal::orderBy('title', 'asc')->get(),
@@ -56,7 +56,8 @@ private function getWeatherData($city)
           $city = implode(" ",$city);  
         }
         $weather = Cache::remember("weather.$city", 60, function () use ($city) {
-            $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=4b8ae4fdc2fa26b5e710d1bf79129fde&units=metric";
+            $url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=" . env('OPEN_WEATHER_MAP_KEY') . "&units=metric";
+            // dd($url);
             return Http::get($url)->json();
         });
         if (isset($weather['main']) && isset($weather)) {
