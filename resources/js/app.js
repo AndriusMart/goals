@@ -77,7 +77,12 @@ for (let i = 0; i < leftValues.length; i++) {
     let Div = myDiv[i].textContent;
     console.log(Div);
     console.log(leftValue);
-    if (leftValue < 2) {
+    if (leftValue < 1) {
         myDiv[i].style.backgroundColor = "red";
-    }
+    }if (leftValue < 11 && leftValue > 1) {
+      myDiv[i].style.backgroundColor = "yellow";
+  }
+  if (leftValue > 11) {
+    myDiv[i].style.backgroundColor = "green";
+}
 }

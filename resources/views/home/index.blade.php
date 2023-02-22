@@ -85,14 +85,14 @@
                                                 </h4>
                                             </div>
                                             <div class="buttons">
-                                                <a href="{{route('g_show', $goal)}}" class="btn btn-info">Show</a>
-                                                <a href="{{route('g_edit', $goal)}}" class="btn btn-success">Edit</a>
+                                                <a href="{{route('g_show', $goal)}}" class="btn btn-info border border-dark">Info</a>
+                                                <a href="{{route('g_edit', $goal)}}" class="btn btn-success border border-dark">Edit</a>
                                                 <form action="{{route('g_done', $goal)}}" method="post"
                                                     enctype="multipart/form-data">
                                                     <input type="hidden" value="2" name="done">
                                                     @csrf
                                                     @method('put')
-                                                    <button type="submit" class="btn btn-danger">Done</button>
+                                                    <button type="submit" class="btn btn-danger border border-dark">Done</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -122,14 +122,14 @@
                                                 <h2><span>Title: </span>{{$goal->title}}</h2>
                                             </div>
                                             <div class="buttons">
-                                                <a href="{{route('g_show', $goal)}}" class="btn btn-info">Show</a>
-                                                <a href="{{route('g_edit', $goal)}}" class="btn btn-success">Edit</a>
+                                                <a href="{{route('g_show', $goal)}}" class="btn btn-info border border-dark">Info</a>
+                                                <a href="{{route('g_edit', $goal)}}" class="btn btn-success border border-dark">Edit</a>
                                                 <form action="{{route('g_done', $goal)}}" method="post"
                                                     enctype="multipart/form-data">
                                                     <input type="hidden" value="1" name="done">
                                                     @csrf
                                                     @method('put')
-                                                    <button type="submit" class="btn btn-danger">Undo</button>
+                                                    <button type="submit" class="btn btn-danger border border-dark">Undo</button>
                                                 </form>
                                             </div>
                                         </div>
