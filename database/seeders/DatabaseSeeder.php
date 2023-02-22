@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         DB::table('goals')->insert([
             'title' => $title[rand(0, count($title)-1)],
             'days' => rand(1, 17),
-            'user_id' => 2,
+            'user_id' => rand(1, 2),
             'done' => rand(1,2),
             'about' => $faker->paragraph(1),
             'created_at' => $time,

@@ -129,6 +129,6 @@ class GoalController extends Controller
     public function destroy(Goal $goal)
     {
         $goal->delete();
-        return redirect()->route('g_index')->with('ok', 'deleted');
+        return redirect()->route('home')->with('ok', 'deleted');
     }
 }
