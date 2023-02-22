@@ -32,7 +32,7 @@ class HomeController extends Controller
             $city = $this->getCityByIp($request->ip());
             $weather = $this->getWeatherData($city);
         } 
-        
+        // dd($weather['main']['temp']);
         return view('home.index', [
             'goals' => Goal::orderBy('title', 'asc')->get(),
             'time_now' => Carbon::now(),
