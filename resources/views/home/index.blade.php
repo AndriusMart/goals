@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" id="city" placeholder="Enter city" name="city">
                 </div>
-                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                <button type="submit" class="btn btn-primary" id="submit">Search</button>
             </form>
             <div id="weather-result"></div>
         </div>
@@ -23,8 +23,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{$city}}</h5>
-                        <p class="card-text">Temperature {{$temp}} &#8451;</p>
-                        <p class="card-text">Weather {{$weather}}</p>
+                        <p class="card-text">Temperature: {{$temp}} &#8451;</p>
+                        <p class="card-text">Weather: {{$weather}}</p>
                     </div>
                 </div>
             </div>
@@ -90,13 +90,13 @@
                                     <a href="{{route('g_show', $goal)}}"
                                         class="btn btn-info border border-dark">Info</a>
                                     <a href="{{route('g_edit', $goal)}}"
-                                        class="btn btn-success border border-dark">Edit</a>
+                                        class="btn btn-info border border-dark">Edit</a>
                                     <form action="{{route('g_done', $goal)}}" method="post"
                                         enctype="multipart/form-data">
                                         <input type="hidden" value="2" name="done">
                                         @csrf
                                         @method('put')
-                                        <button type="submit" class="btn btn-danger border border-dark">Done</button>
+                                        <button type="submit" class="btn btn-success border border-dark">Done</button>
                                     </form>
                                     <form action="{{route('g_delete', $goal)}}" method="post">
                                         @csrf
@@ -134,13 +134,18 @@
                                     <a href="{{route('g_show', $goal)}}"
                                         class="btn btn-info border border-dark">Info</a>
                                     <a href="{{route('g_edit', $goal)}}"
-                                        class="btn btn-success border border-dark">Edit</a>
+                                        class="btn btn-info border border-dark">Edit</a>
                                     <form action="{{route('g_done', $goal)}}" method="post"
                                         enctype="multipart/form-data">
                                         <input type="hidden" value="1" name="done">
                                         @csrf
                                         @method('put')
                                         <button type="submit" class="btn btn-danger border border-dark">Undo</button>
+                                    </form>
+                                    <form action="{{route('g_delete', $goal)}}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
                             </div>

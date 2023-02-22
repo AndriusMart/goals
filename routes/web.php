@@ -30,8 +30,8 @@ Route::post('/searchCity', [H::class, 'searchCity'])->name('searchCity')->middle
 
 
 Route::prefix('goal')->name('g_')->group(function () {
-    Route::get('/', [G::class, 'index'])->name('index')->middleware('gate:user');
-    Route::get('/create', [G::class, 'create'])->name('create')->middleware('gate:user');
+    Route::get('/', [G::class, 'index'])->name('index')->middleware('gate:admin');
+    Route::get('/create', [G::class, 'create'])->name('create')->middleware('gate:admin');
     Route::post('/create', [G::class, 'store'])->name('store')->middleware('gate:user');
     Route::get('/show/{goal}', [G::class, 'show'])->name('show')->middleware('gate:user');
     Route::delete('/delete/{goal}', [G::class, 'destroy'])->name('delete')->middleware('gate:user');
